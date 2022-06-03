@@ -28,7 +28,7 @@ check alive
 # 代码嵌入示例
 
 ```
-go get github.com/g1022/alive
+go get github.com/g1022/glive
 ```
 
 在你的阻塞代码之前运行：
