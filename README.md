@@ -34,9 +34,8 @@ go get github.com/g1022/glive
 在你的阻塞代码之前运行：
 
 ```
-go func() {
-    alive.SetPort(8090)
-    alive.RunPingServer()
+go func() { 
+    alive.RunServer(":8080")
 }()
 ```
 
