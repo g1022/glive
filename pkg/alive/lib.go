@@ -4,11 +4,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 )
 
-var Settings = struct {
-	Port int
-}{}
+const Note = "smoke_test"
 
 func pingHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "text/json")
@@ -16,25 +15,21 @@ func pingHandler(w http.ResponseWriter, r *http.Request) {
 	_, _ = fmt.Fprintf(w, resPing) //这个写入到w的是输出到客户端的
 }
 
-func SetPort(port int) {
-	Settings.Port = port
-}
-func PingPort() int {
-	if Settings.Port != 0 {
-		return Settings.Port
-	}
-	return 8080
-}
-
-// RunPingServer 服务的响应,探活机制
-func RunPingServer() {
-	port := PingPort()
+// RunServer
+//runSrv := "127.0.0.1:8080" //本地 MAC调试不会弹窗，但只能本机调用
+//":8080","0.0.0.0:8080"可以对外
+func RunServer(addr string) {
 	http.HandleFunc("/api/ping", pingHandler)
 	http.HandleFunc("/api/smoke", pingHandler)
 	//设置访问的路由
-	log.Println(fmt.Sprintf("http://127.0.0.1:%d/api/ping\n", port))
-	//runSrv := "127.0.0.1:8080" //本地 MAC调试不会弹窗
-	err := http.ListenAndServe(fmt.Sprintf("127.0.0.1:%d", port), nil) //设置监听的端口
+
+	var port = ""
+	if strings.Contains(addr, ":") {
+		port = strings.Split(addr, ":")[1]
+	}
+
+	log.Println(fmt.Sprintf("http://127.0.0.1:%s/api/ping\n", port))
+	err := http.ListenAndServe(addr, nil) //设置监听的端口
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}

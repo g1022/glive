@@ -1,15 +1,15 @@
 package test
 
 import (
+	"fmt"
 	"github.com/g1022/glive/pkg/alive"
 	"testing"
 )
 
 func TestTsSmoke(t *testing.T) {
-	alive.SetPort(8090)
+	fmt.Println(alive.Note)
 }
 
 func TestServer(t *testing.T) {
-	alive.SetPort(8090)
-	alive.RunPingServer()
+	alive.RunServer(":8080")
 }
